@@ -2,6 +2,9 @@
     <Link :href="route('names.index')">
         <h1>index</h1>
     </Link>
+    <!-- <Link :href="route('names.tables')">
+        <h1>tavles</h1>
+    </Link> -->
     <form @submit.prevent="update">
         <div>
         <label class="label">Name</label>

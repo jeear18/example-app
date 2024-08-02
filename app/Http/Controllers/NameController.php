@@ -20,12 +20,20 @@ class NameController extends Controller
         ]);
     }
 
+    public function tables()
+    {
+        return inertia('Index/Tables',
+    [
+        'names' => Name::all()
+    ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         return inertia('Index/Create');
+        // return inertia('Modals/CreateModal');
     }
 
     /**
@@ -81,8 +89,10 @@ class NameController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Name $name)
     {
-        //
+        $name -> delete();
+
+        return redirect() -> back();
     }
 }

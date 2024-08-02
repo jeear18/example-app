@@ -1,6 +1,9 @@
 <template>
-     <Link :href="route('names.index')">
+     
         <h1>index</h1>
+
+    <Link :href="route('tables')">
+        <h1>tables</h1>
     </Link>
     <!-- <slot></slot> -->
     <div>
@@ -15,8 +18,10 @@
         <Link :href="route('names.edit',{name: name.id})">
             <button class=" p-1 rounded-md bg-yellow-400">edit</button>
         </Link>
-      
+        <Link :href="route('names.destroy',{name: name.id})" as="button" method="DELETE" >
             <button  class=" p-1 rounded-md bg-red-400">dlete</button>
+        </Link>
+            
     
         
     </div>
