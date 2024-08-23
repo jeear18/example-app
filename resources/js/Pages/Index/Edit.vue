@@ -1,10 +1,6 @@
 <template>
-    <Link :href="route('names.index')">
-        <h1>index</h1>
-    </Link>
-    <!-- <Link :href="route('names.tables')">
-        <h1>tavles</h1>
-    </Link> -->
+   <div  class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full md:w-4/5 lg:w-3/4">
     <form @submit.prevent="update">
         <div>
         <label class="label">Name</label>
@@ -12,10 +8,14 @@
     </div>
     <div>
       
-            <button  type="submit" class=" p-1 rounded-md bg-blue-300">Update</button>
-       
+    <button  type="submit" class="btn-primary">Update</button>    
     </div>
     </form>
+     </div>
+ </div>
+  
+
+
   
 </template>
 

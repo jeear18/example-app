@@ -27,7 +27,8 @@
 </template>
 <script setup>
     import { Link, useForm } from '@inertiajs/vue3' 
-
+    import { route } from '../../../../vendor/tightenco/ziggy/src/js';
+    
     const form = useForm({
         fname:null,
     })

@@ -1,67 +1,83 @@
 <template>
-       
-    <div  class="flex items-center justify-center min-h-screen bg-gray-100">
-        <div class="bg-white shadow-lg rounded-lg p-8 w-fit">
-          <div>
-            <Link :href="route('names.create')">
-              <button type="button" class="btn-primary">Create</button>
-            </Link>
-          </div>
-            
-            <table class="min-w-full bg-white">
+  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full md:w-4/5 lg:w-3/4">
+      <div>
+        <button @click="openCreateModal" type="button" class="btn-primary">Create</button>
+      </div>
+      
+      <table class="min-w-full bg-white">
         <thead class="bg-gray-800 text-white">
           <tr>
             <th class="w-1/3 px-4 py-2">Name</th>
             <th class="w-1/3 px-4 py-2">Status</th>
             <th class="px-4 py-2">Actions</th>
-          
           </tr>
         </thead>
         <tbody class="text-gray-700">
-          <tr v-for="name in names" >
+          <tr v-for="name in names" :key="name.id">
             <td class="border px-4 py-2">{{ name.fname }}</td>
-            <td class="border px-4 py-2">
+            <td class="border px-4 py-2 text-center">
               <span class="bg-green-200 text-green-700 py-1 px-3 rounded-full text-xs">Active</span>
             </td>
             <td class="border px-4 py-2 text-center">
-                
-                    <button class="text-blue-500 hover:text-blue-700 mr-2">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                    </button>
-                    <button @click="confirmDeleteUser(name)" class="text-red-500 hover:text-red-700">                 
-                    <i class="fa-solid fa-trash"></i>
-                    </button>
-                         
+              <button @click="confirmEditUser(name)" class="text-blue-500 hover:text-blue-700 mr-2">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button @click="confirmDeleteUser(name)" class="text-red-500 hover:text-red-700">
+                <i class="fa-solid fa-trash"></i>
+              </button>
             </td>
           </tr>
-          
         </tbody>
       </table>
-     
-     
-        </div>
-        
-    </div> 
-  
+      <CreateModal :isOpen="isCreateModalOpen" :closeModal="closeCreateModal" />
+      <EditModal :isOpenEdit="isEditModalOpen" :name="selectedName" :closeModal1="closeEditModal" />
+    </div>
+  </div>
 </template>
 
 <script setup>
-    import { defineProps } from 'vue';
-    import { Link, } from '@inertiajs/vue3' 
-    import { route } from '../../../../vendor/tightenco/ziggy/src/js';
-    import  DeleteModal  from '../../Pages/Modals/DeleteModal.vue';
-    import Swal from 'sweetalert2';
-    // import { Inertia } from '@inertiajs/vue3' 
-    import { router } from '@inertiajs/vue3'
+import { ref, onMounted } from 'vue';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { route } from '../../../../vendor/tightenco/ziggy/src/js';
+import CreateModal from '@/Pages/Modals/CreateModal.vue';
+import EditModal from '@/Pages/Modals/EditModal.vue';
+import Swal from 'sweetalert2';
+import { router } from '@inertiajs/vue3';
 
-    const props = defineProps({
+// Vue.prototype.$swal = Swal;
+
+const props = defineProps({
   names: Array,
 });
+
+const { flash } = usePage().props; // Get flash messages
+
+const isCreateModalOpen = ref(false);
+const isEditModalOpen = ref(false);
+const selectedName = ref({});
+
+const openCreateModal = () => {
+  isCreateModalOpen.value = true;
+};
+
+const closeCreateModal = () => {
+  isCreateModalOpen.value = false;
+};
+
+const openEditModal = (name) => {
+  selectedName.value = { ...name };
+  isEditModalOpen.value = true;
+};
+
+const closeEditModal = () => {
+  isEditModalOpen.value = false;
+};
 
 const confirmDeleteUser = (name) => {
   Swal.fire({
     title: 'Are you sure?',
-    text: 'You won\'t be able to revert this!',
+    text: "You won't be able to revert this!",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#d33',
@@ -70,6 +86,22 @@ const confirmDeleteUser = (name) => {
   }).then((result) => {
     if (result.isConfirmed) {
       deleteUser(name);
+    }
+  });
+};
+
+const confirmEditUser = (name) => {
+  Swal.fire({
+    title: 'Are you sure you want to edit?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      openEditModal(name);
     }
   });
 };
@@ -85,4 +117,6 @@ const deleteUser = (name) => {
     },
   });
 };
+
+
 </script>

@@ -14,7 +14,7 @@ class NameController extends Controller
     {
       
         return inertia(
-            'Index/Index',
+            'Index/Tables',
         [
           'names' => Name::all()
         ]);
@@ -32,22 +32,61 @@ class NameController extends Controller
      */
     public function create()
     {
-        return inertia('Index/Create');
-        // return inertia('Modals/CreateModal');
+        // return inertia('Index/Create');
+        return inertia('Modals/CreateModal');
     }
 
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+
+    // //     // dd($request->all());
+    // //    Name::create([
+    // //     ...$request->validate([
+    // //         'fname' => 'required',
+    // //     ])
+    // //    ]);
+    // //    return redirect()->route('names.index');
+    // $request->validate([
+    //     'fname' => 'required|string|max:255', 
+    // ]);
+    // $existingRecord = Name::where('fname', $request->input('fname'))->first();
+
+    // if ($existingRecord) {
+    //     return back()->with('error');
+       
+    // } else {
+    //     $name = new Name;
+    //     $name->fname = $request->input('fname');
+    //     $name->save();
+    //     // Flash a success message
+    //     return redirect()->route('names.index')->with('success');
+    // }
+
     public function store(Request $request)
-    {
-       Name::create([
-        ...$request->validate([
-            'fname' => 'required',
-        ])
-       ]);
-       return redirect()->route('names.index');
+{
+    $request->validate([
+        'fname' => 'required|string|max:255',
+    ]);
+
+    $existingRecord = Name::where('fname', $request->input('fname'))->first();
+
+    if ($existingRecord) {
+        return back()->with('error', 'Record already exists.')->withInput();
+    } else {
+        $name = new Name;
+        $name->fname = $request->input('fname');
+        $name->save();
+
+        return redirect()->route('names.index')->with('success', 'Record successfully created.');
     }
+}
+   
+
+    
+
     /**
      * Display the specified resource.
      */
@@ -59,13 +98,20 @@ class NameController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Name $name)
+    public function edit(Name $name )
     {
         return inertia('Index/Edit',
+        // return inertia('Modals/EditModal',
         [
             'names' => $name
         ]);
     }
+
+    // public function edit($id)
+    // {
+    //     $item = Name::findOrFail($id);
+    //     return inertia('Modals/EditModal', ['item' => $item]);
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -74,9 +120,9 @@ class NameController extends Controller
     {  $request->validate([
         'fname' => 'required',
     ]);
-        // dd($request->names);
+        // dd($request->name);
         $name  
-        ->where('id' ,$request->names)
+        ->where('id',$request->name)
         ->update([
             'fname' => $request->fname,
            ])
