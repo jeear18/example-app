@@ -12,3 +12,5 @@ Route::put('ups',[NameController::class,'update'])->name('update');
 Route::get('tables',[NameController::class,'tables'])->name('tables');
 
 Route::get('/names/{id}/edit', [NameController::class, 'edit'])->name('names.edit');
+Route::post('/store', [NameController::class, 'store']);
+Route::put('/store', [NameController::class, 'store']);

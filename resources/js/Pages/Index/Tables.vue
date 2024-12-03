@@ -4,7 +4,7 @@
       <div>
         <button @click="openCreateModal" type="button" class="btn-primary">Create</button>
       </div>
-      
+
       <table class="min-w-full bg-white">
         <thead class="bg-gray-800 text-white">
           <tr>
@@ -17,7 +17,8 @@
           <tr v-for="name in names" :key="name.id">
             <td class="border px-4 py-2">{{ name.fname }}</td>
             <td class="border px-4 py-2 text-center">
-              <span class="bg-green-200 text-green-700 py-1 px-3 rounded-full text-xs">Active</span>
+                <span v-if="name.status === 'Active'" class="bg-green-200 text-green-700 py-1 px-3 rounded-full text-xs">Active</span>
+                <span v-else class="bg-red-200 text-red-700 py-1 px-3 rounded-full text-xs"> Inactive</span>
             </td>
             <td class="border px-4 py-2 text-center">
               <button @click="confirmEditUser(name)" class="text-blue-500 hover:text-blue-700 mr-2">

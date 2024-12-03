@@ -12,7 +12,7 @@ class NameController extends Controller
      */
     public function index()
     {
-      
+
         return inertia(
             'Index/Tables',
         [
@@ -50,13 +50,13 @@ class NameController extends Controller
     // //    ]);
     // //    return redirect()->route('names.index');
     // $request->validate([
-    //     'fname' => 'required|string|max:255', 
+    //     'fname' => 'required|string|max:255',
     // ]);
     // $existingRecord = Name::where('fname', $request->input('fname'))->first();
 
     // if ($existingRecord) {
     //     return back()->with('error');
-       
+
     // } else {
     //     $name = new Name;
     //     $name->fname = $request->input('fname');
@@ -69,23 +69,31 @@ class NameController extends Controller
 {
     $request->validate([
         'fname' => 'required|string|max:255',
+        'status' => 'required|string|max:255',
     ]);
 
-    $existingRecord = Name::where('fname', $request->input('fname'))->first();
+    $existingRecord = Name::where('fname', $request->input('fname'))->exists();
 
-    if ($existingRecord) {
-        return back()->with('error', 'Record already exists.')->withInput();
-    } else {
+    if ($existingRecord)
+    {
+        return response()->json(['message' => 'error'], 200);
+    }
+     else
+      {
         $name = new Name;
         $name->fname = $request->input('fname');
+        $name->status = $request->input('status');
         $name->save();
 
-        return redirect()->route('names.index')->with('success', 'Record successfully created.');
+        // return redirect()->route('names.index')->with('sucess');
+
+        return response()->json(['message' => 'success', 'redirect' => route('tables')], );
+
     }
 }
-   
 
-    
+
+
 
     /**
      * Display the specified resource.
@@ -117,19 +125,21 @@ class NameController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Name $name)
-    {  $request->validate([
+    { $request->validate([
         'fname' => 'required',
+        'status' => 'required',
     ]);
         // dd($request->name);
-        $name  
+        $name
         ->where('id',$request->name)
         ->update([
             'fname' => $request->fname,
+            'status' => $request->status,
            ])
           ;
-           
-           return redirect()->route('names.index');
-           
+
+           return redirect()->route('tables');
+
     }
 
     /**
