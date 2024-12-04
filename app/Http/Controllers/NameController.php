@@ -151,4 +151,9 @@ class NameController extends Controller
 
         return redirect() -> back();
     }
+
+    public function main_layout()
+    {
+        return inertia('Index/Dashboard');
+    }
 }
